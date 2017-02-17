@@ -1,0 +1,27 @@
+{
+  "name": "lambda-pdf",
+  "version": "0.0.1",
+  "description": "Processes PDF files on AWS Lambda",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dueyfinster/lambda-pdf.git"
+  },
+  "keywords": [
+    "pdf",
+    "aws",
+    "lambda"
+  ],
+  "author": "Neil Grogan",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/dueyfinster/lambda-pdf/issues"
+  },
+  "homepage": "https://github.com/dueyfinster/lambda-pdf#readme",
+  "dependencies": {
+    "aws-sdk": "^2.15.0"
+  }
+}

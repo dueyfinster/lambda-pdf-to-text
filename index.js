@@ -7,11 +7,13 @@ const opts = ' -enc UTF-8 - '
 exports.handler = (event, context, callback) => {
   console.log('incoming: ', event)
   if (!event.file) {
+      console.error('No file uploaded: ', event.file);
       return callback('Please upload a pdf file to use');
   }
 	
   fs.writeFile("/tmp/test.pdf", event.pdf, function (err) {
     if (err) {
+      console.error('Writing file failed: ', err);
       return callback("writeFile failed: " + err);
     } else {
       //context.succeed("writeFile succeeded")

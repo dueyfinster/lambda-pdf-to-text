@@ -2,7 +2,7 @@
 source .env
 
 request(){
-  curl -F 'file=@/home/ngrogan/repos/lambda-pdf/test/li-test.pdf' $URL
+  curl -F 'file=@/home/ngrogan/repos/lambda-pdf/test.pdf' $URL
 }
 
 deploy(){
@@ -13,7 +13,7 @@ deploy(){
   rm *.zip
 
   # First zip up the files
-  zip $ZIP_NAME index.js pdftotext -R node_modules/
+  zip $ZIP_NAME index.js pdftotext test.pdf -R node_modules/
 
   # Then upload using AWS CLI
   aws lambda update-function-code --function-name $FUNCTION_NAME --zip-file fileb://$ZIP_NAME --publish

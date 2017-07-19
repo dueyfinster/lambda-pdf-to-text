@@ -13,7 +13,7 @@ deploy(){
   rm *.zip
 
   # First zip up the files
-  zip $ZIP_NAME index.js pdftotext test.pdf -R node_modules/
+  zip -r $ZIP_NAME index.js pdftotext test.pdf node_modules/
 
   # Then upload using AWS CLI
   aws lambda update-function-code --function-name $FUNCTION_NAME --zip-file fileb://$ZIP_NAME --publish

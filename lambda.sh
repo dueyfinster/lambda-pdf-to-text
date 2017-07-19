@@ -19,7 +19,7 @@ deploy(){
   aws lambda update-function-code --function-name $FUNCTION_NAME --zip-file fileb://$ZIP_NAME --publish
   }
 
-  logs(){
+logs(){
 
   log_group_name=$(aws logs describe-log-groups \
     --output text \

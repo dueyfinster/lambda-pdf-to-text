@@ -1,8 +1,12 @@
 #!/bin/bash
 source .env
 
-request(){
+request_form(){
   curl -F 'file=@/home/ngrogan/repos/lambda-pdf/test.pdf' $URL
+}
+
+request(){
+  curl --header "Content-Type:application/pdf" --data-binary @test.pdf $URL
 }
 
 deploy(){

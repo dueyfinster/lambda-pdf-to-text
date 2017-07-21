@@ -61,8 +61,9 @@ case $key in
     request
     shift # past argument
     ;;
-    --default)
-    DEFAULT=YES
+    -f|--form)
+    request_form
+    shift # past argument
     ;;
     *)
             # unknown option

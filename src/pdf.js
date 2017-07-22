@@ -9,18 +9,24 @@ const exec = require('child_process').exec
 export default class PDFToText
 {
   /**
-   * @param {object}
+   * @param {fileName} - name of the file
+   * @param {fileData} - a buffer representing file contents
    */
   constructor(fileName, fileData) {
     this.fileName = fileName;
-    this.fileData = Buffer.from(fileData, 'base64');
+    this.fileData = fileData;
     this.filePath = path.join(os.tmpDir(), path.basename(this.fileName));
-    console.log('PDFToText init with: ' + fileName + ' ' + this.filePath + ' ' + fileData);
+    console.log(`PDFToText init with: ${this.fileName} ${this.filePath} ${JSON.stringify(this.fileData)}`);
   }
 
+  /**
+  * Write a buffer to disk
+  * @param {filePath} - path to the file
+  * @param {fileData} - the buffer to be written to disk
+  */
   async write_file(filePath, fileData){
     return new Promise(function(resolve, reject) {
-      console.log('Will write file: ' + filePath + ' with data: ' + fileData);
+      console.log(`Will write file: ${filePath} with data: ${JSON.stringify(fileData)}`);
       fs.writeFile(filePath, fileData, 'binary', function (err) {
         if (err) { reject('Writing file failed: ' + err) }
         console.log('Wrote pdf file to: ' + filePath);

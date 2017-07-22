@@ -4,6 +4,14 @@
   "description": "Processes PDF files on AWS Lambda",
   "main": "bin/index.js",
   "scripts": {
+    "build": "npm run build:init && npm run build:bin && npm run build:js && npm run build:install",
+    "build:init": "rm -rf dist && mkdir dist",
+    "build:bin": "cp bin/* dist/",
+    "build:js": "babel index.js --out-dir dist && babel src --out-dir dist/src",
+    "build:install": "cp package.json dist/ && cd dist && npm install --production",
+    "package": "npm run build && npm run package:pack",
+    "package:pack": "zip -r artifact.zip dist/*",
+    "deploy": "npm run package && aws lambda update-function-code --function-name pdf --zip-file fileb://artifact.zip --region eu-west-1",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -23,6 +31,37 @@
   "homepage": "https://github.com/dueyfinster/lambda-pdf#readme",
   "dependencies": {
     "aws-sdk": "^2.15.0",
+    "babel-runtime": "^6.11.6",
     "busboy": "^0.2.14"
+  }, 
+  "devDependencies": {
+    "babel-cli": "^6.16.0",
+    "babel-core": "^6.17.0",
+    "babel-plugin-transform-async-to-generator": "^6.16.0",
+    "babel-plugin-transform-class-properties": "^6.16.0",
+    "babel-plugin-transform-runtime": "^6.15.0",
+    "babel-polyfill": "^6.9.1",
+    "babel-preset-es2015": "^6.16.0",
+    "babel-preset-stage-0": "^6.16.0",
+    "babel-register": "^6.9.0",
+    "chai": "latest",
+    "eslint": "^3.10.0",
+    "eslint-config-airbnb": "^13.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.6.0",
+    "mocha": "latest"
+  },
+  "babel": {
+    "presets": [
+      "stage-0",
+      "es2015"
+    ],
+    "plugins": [
+      "transform-runtime",
+      "transform-async-to-generator",
+      "transform-class-properties"
+    ]
+
   }
 }

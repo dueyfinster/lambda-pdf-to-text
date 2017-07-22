@@ -9,20 +9,6 @@ request(){
   curl --header "Content-Type:application/pdf" --data-binary @test.pdf $URL
 }
 
-deploy(){
-  FUNCTION_NAME="pdf"
-  ZIP_NAME="fun.zip"
-
-  # Remove any existing zip files
-  rm *.zip
-
-  # First zip up the files
-  zip -r $ZIP_NAME index.js pdftotext test.pdf node_modules/
-
-  # Then upload using AWS CLI
-  aws lambda update-function-code --function-name $FUNCTION_NAME --zip-file fileb://$ZIP_NAME --publish
-  }
-
 logs(){
 
   log_group_name=$(aws logs describe-log-groups \
@@ -49,10 +35,6 @@ do
 key="$1"
 
 case $key in
-    -d|--deploy)
-    deploy
-    shift # past argument
-    ;;
     -l|--logs)
     logs
     shift # past argument

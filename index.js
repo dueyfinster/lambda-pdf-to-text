@@ -3,6 +3,7 @@ process.env['PATH'] = process.env['PATH'] + ':' + process.env['LAMBDA_TASK_ROOT'
 import PDFToText from './src/pdf';
 import FormHandler from './src/form-handler';
 import Bills from './src/bills';
+import Dropbox from './src/dropbox';
 import bills_config from './config';
 
 
@@ -39,14 +40,18 @@ exports.handler = async (event, context, callback) => {
     console.log('Form Response is: ' + JSON.stringify(config));
 
     const controller = new PDFToText(config);
-    const response = await controller.run();
-    console.log(`PDF Response is: ${response}`);
+    const pdfResp = await controller.run();
+    console.log(`PDF Response is: ${pdfResp}`);
 
-    const bi = new Bills(response, bills_config['bills']);
+    const bi = new Bills(pdfResp.text, bills_config['bills']);
     const res = await bi.run();
     console.log(`Bill Response is: ${JSON.stringify(res)}`);
 
-    return context.succeed({ statusCode: 200, body: response, headers: headers });
+    const db = new Dropbox(bills_config['DB_TOKEN']);
+    const dbResp = await db.upload(res.path, config.data)
+    console.log(`Dropbox Response is: ${JSON.stringify(dbResp)}`);
+
+    return context.succeed({ statusCode: 200, body: pdfResp.text, headers: headers });
 
   } catch (e) {
     console.log(`Application ERROR: ${e.stack}`);

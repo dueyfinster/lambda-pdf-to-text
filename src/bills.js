@@ -29,6 +29,7 @@ export default class Bills {
     const matches = this.text.match(accObj.regex);
     if(matches.length >= accObj.date_num) {
       const rawDate = matches[accObj.date_num];
+      console.log(`Raw date for account ${accObj.bill_type} is: ${rawDate}`);
       const date = new moment(rawDate, accObj.date_format).toDate();
       const formatted_date = moment(date).format('YY-MM');
       console.log(`Date for account ${accObj.bill_type} is: ${formatted_date}`);

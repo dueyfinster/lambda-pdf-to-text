@@ -102,6 +102,6 @@ export default class PDFToText
     const pdfText = await this.get_text(this.filePath);
     console.log('Returning from PDFToText: ' + pdfText);
 
-    return pdfText;
+    return { "text": pdfText, "path": this.filePath };
   }
 }

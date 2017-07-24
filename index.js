@@ -1,7 +1,10 @@
+const multipart = require("parse-multipart");
 process.env['PATH'] = process.env['PATH'] + ':' + process.env['LAMBDA_TASK_ROOT'] + '/dist/'
 import PDFToText from './src/pdf';
 import FormHandler from './src/form-handler';
-var multipart = require("parse-multipart");
+import Bills from './src/bills';
+import bills_config from './config';
+
 
 const headers = {
   'Content-Type': 'application/json',
@@ -38,6 +41,9 @@ exports.handler = async (event, context, callback) => {
     const controller = new PDFToText(config);
     const response = await controller.run();
     console.log(`PDF Response is: ${response}`);
+
+    const bi = new Bills(response, bills_config['bills']);
+    const res = await bi.run();
 
     return context.succeed({ statusCode: 200, body: response, headers: headers });
 

@@ -32,8 +32,9 @@
   "dependencies": {
     "aws-sdk": "^2.15.0",
     "babel-runtime": "^6.11.6",
-    "busboy": "^0.2.14"
-  }, 
+    "busboy": "^0.2.14",
+    "parse-multipart": "^1.0.4"
+  },
   "devDependencies": {
     "babel-cli": "^6.16.0",
     "babel-core": "^6.17.0",
@@ -62,6 +63,5 @@
       "transform-async-to-generator",
       "transform-class-properties"
     ]
-
   }
 }

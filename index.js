@@ -44,6 +44,7 @@ exports.handler = async (event, context, callback) => {
 
     const bi = new Bills(response, bills_config['bills']);
     const res = await bi.run();
+    console.log(`Bill Response is: ${JSON.stringify(res)}`);
 
     return context.succeed({ statusCode: 200, body: response, headers: headers });
 

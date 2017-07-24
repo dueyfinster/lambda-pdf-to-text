@@ -34,6 +34,7 @@
     "aws-sdk": "^2.15.0",
     "babel-runtime": "^6.11.6",
     "busboy": "^0.2.14",
+    "moment": "^2.18.1",
     "parse-multipart": "^1.0.4"
   },
   "devDependencies": {

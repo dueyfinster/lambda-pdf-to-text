@@ -1,3 +1,4 @@
+import moment from 'moment';
 
 /**
 * Given text from a bill, it searches for accounts that match, and 
@@ -12,22 +13,39 @@ export default class Bills {
   }
 
 
-  search_text_for_account(){
+  match_account(){
     for(let i in this.config){
       const accObj = this.config[i];
       console.log(`Checking account ${JSON.stringify(accObj.bill_type)}`);
       if(this.text.includes(accObj.acc_no)){
         console.log(`Account matched for: ${JSON.stringify(accObj.bill_type)}`);
+        return accObj;
       }
     }
-
+    throw new Error('No account matched in supplied text!');
   }
 
-  retrieve_bill_date(){
-    console.log('TODO');
+  retrieve_bill_date(accObj){
+    const matches = this.text.match(accObj.regex);
+    if(matches.length >= accObj.date_num) {
+      const rawDate = matches[accObj.date_num];
+      const date = new moment(rawDate, accObj.date_format).toDate();
+      const formatted_date = moment(date).format('YY-MM');
+      console.log(`Date for account ${accObj.bill_type} is: ${formatted_date}`);
+      return formatted_date;
+    } else {
+      console.log(`No Date for account ${accObj.bill_type} matched!`);
+      throw new Error('No date matched in bill')
+    }
   }
+
 
   async run(){
-    this.search_text_for_account();
+    const accObj = this.match_account();
+    const billDate = this.retrieve_bill_date(accObj);
+    const billFullName = billDate + " " + accObj.bill_type + ".pdf"
+    const billPath = accObj.category + "/" + billFullName;
+
+    return { "name": billFullName, "path": billPath };
   } 
 }

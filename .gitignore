@@ -6,6 +6,7 @@ npm-debug.log*
 .env
 tags
 dist/
+config.json
 
 # Runtime data
 pids

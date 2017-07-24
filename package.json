@@ -4,9 +4,10 @@
   "description": "Processes PDF files on AWS Lambda",
   "main": "bin/index.js",
   "scripts": {
-    "build": "npm run build:init && npm run build:bin && npm run build:js && npm run build:install",
+    "build": "npm run build:init && npm run build:bin && npm run build:conf && npm run build:js && npm run build:install",
     "build:init": "rm -rf dist && mkdir dist",
     "build:bin": "cp bin/* dist/",
+    "build:conf": "cp conf/* dist/",
     "build:js": "babel index.js --out-dir dist && babel src --out-dir dist/src",
     "build:install": "cp package.json dist/ && cd dist && npm install --production",
     "package": "npm run build && npm run package:pack",

@@ -13,7 +13,7 @@
     "package": "npm run build && npm run package:pack",
     "package:pack": "zip -r artifact.zip dist/*",
     "deploy": "npm run package && aws lambda update-function-code --function-name pdf --zip-file fileb://artifact.zip --region eu-west-1",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha -r babel-register -r babel-polyfill --recursive test/"
   },
   "repository": {
     "type": "git",

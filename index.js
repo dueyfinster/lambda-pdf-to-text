@@ -1,5 +1,7 @@
 const multipart = require("parse-multipart");
 process.env['PATH'] = process.env['PATH'] + ':' + process.env['LAMBDA_TASK_ROOT'] + '/dist/'
+const log = require('winston');
+log.level = process.env.LOG_LEVEL
 import PDFToText from './src/pdf';
 import FormHandler from './src/form-handler';
 import Bills from './src/bills';
@@ -35,26 +37,26 @@ function processPayload(event){
 exports.handler = async (event, context, callback) => {
   try {
 
-    console.log(`Event is: ${JSON.stringify(event)}`);
+    log.debug(`Event is: ${JSON.stringify(event)}`);
     const config = processPayload(event);
-    console.log('Form Response is: ' + JSON.stringify(config));
+    log.debug('Form Response is: ' + JSON.stringify(config));
 
     const controller = new PDFToText(config);
     const pdfResp = await controller.run();
-    console.log(`PDF Response is: ${pdfResp}`);
+    log.debug(`PDF Response is: ${pdfResp}`);
 
     const bi = new Bills(pdfResp.text, bills_config['bills']);
     const res = await bi.run();
-    console.log(`Bill Response is: ${JSON.stringify(res)}`);
+    log.debug(`Bill Response is: ${JSON.stringify(res)}`);
 
     const db = new Dropbox(bills_config['DB_TOKEN']);
     const dbResp = await db.upload(res.path, config.data)
-    console.log(`Dropbox Response is: ${JSON.stringify(dbResp)}`);
+    log.debug(`Dropbox Response is: ${JSON.stringify(dbResp)}`);
 
     return context.succeed({ statusCode: 200, body: pdfResp.text, headers: headers });
 
   } catch (e) {
-    console.log(`Application ERROR: ${e.stack}`);
+    log.error(`Application ERROR: ${e.stack}`);
     return context.fail({ statusCode: 500, body: `Application Error: ${e}`, headers });
   }
 };

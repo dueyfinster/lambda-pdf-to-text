@@ -1,6 +1,8 @@
 const fs = require("fs");
 const os = require('os');
 const path = require('path');
+const log = require('winston');
+log.level = process.env.LOG_LEVEL
 const exec = require('child_process').exec
 
 /**
@@ -16,7 +18,7 @@ export default class PDFToText
     this.fileName = config.filename;
     this.fileData = config.data;
     this.filePath = path.join(os.tmpDir(), path.basename(this.fileName));
-    console.log(`PDFToText init with: ${this.fileName} ${this.filePath} ${JSON.stringify(this.fileData)}`);
+    log.debug(`PDFToText init with: ${this.fileName} ${this.filePath} ${JSON.stringify(this.fileData)}`);
   }
 
   async write_s3(filePath) {
@@ -25,7 +27,7 @@ export default class PDFToText
 
       AWS.config.region = 'eu-west-1';
       const s3 = new AWS.S3();
-      console.log('Going to call S3');
+      log.debug('Going to call S3');
       
       var params = {
           Bucket: 'gbspdf',
@@ -36,10 +38,10 @@ export default class PDFToText
 
       s3.upload(params, function (err, res) {               
         if(err) {
-          console.log("Error in uploading file on s3 due to "+ err)
+          log.debug("Error in uploading file on s3 due to "+ err)
           reject(err);
         } else {    
-          console.log("File successfully uploaded.")
+          log.debug("File successfully uploaded.")
           resolve();
         }
       });
@@ -52,10 +54,10 @@ export default class PDFToText
   */
   async write_file(filePath, fileData){
     return new Promise(function(resolve, reject) {
-      console.log(`Will write file: ${filePath} with data: ${JSON.stringify(fileData)}`);
+      log.debug(`Will write file: ${filePath} with data: ${JSON.stringify(fileData)}`);
       fs.writeFile(filePath, fileData, 'binary', function (err) {
         if (err) { reject('Writing file failed: ' + err) }
-        console.log('Wrote pdf file to: ' + filePath);
+        log.debug('Wrote pdf file to: ' + filePath);
         resolve();
       });
     });
@@ -68,8 +70,8 @@ export default class PDFToText
    */
   async get_text(filePath) {
     return new Promise(function(resolve, reject) {
-      console.log('Going to run pdftotext on: ' + filePath);
-      console.log('System Path: ' + process.env.PATH);
+      log.debug('Going to run pdftotext on: ' + filePath);
+      log.debug('System Path: ' + process.env.PATH);
       const cmd = 'pdftotext '
       const opts = ' - '
       const allCmd = cmd + '"' + filePath + '"' + opts;
@@ -85,7 +87,7 @@ export default class PDFToText
         result += data.toString();
       });
       child.on('close', function(code) {
-        console.log('stdout result: ' + result);
+        log.debug('stdout result: ' + result);
         resolve(result);
       });
     });
@@ -100,7 +102,7 @@ export default class PDFToText
     await this.write_file(this.filePath, this.fileData);
     // await this.write_s3(this.filePath);
     const pdfText = await this.get_text(this.filePath);
-    console.log('Returning from PDFToText: ' + pdfText);
+    log.debug('Returning from PDFToText: ' + pdfText);
 
     return { "text": pdfText, "path": this.filePath };
   }

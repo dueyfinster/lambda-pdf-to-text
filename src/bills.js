@@ -1,3 +1,5 @@
+const log = require('winston');
+log.level = process.env.LOG_LEVEL
 import moment from 'moment';
 
 /**
@@ -9,16 +11,16 @@ export default class Bills {
   constructor(text, config){
     this.text = text;
     this.config = config;
-    console.log(`Init bills ${JSON.stringify(this.config)}`)
+    log.debug(`Init bills ${JSON.stringify(this.config)}`)
   }
 
 
   match_account(){
     for(let i in this.config){
       const accObj = this.config[i];
-      console.log(`Checking account ${JSON.stringify(accObj.bill_type)}`);
+      log.debug(`Checking account ${JSON.stringify(accObj.bill_type)}`);
       if(this.text.includes(accObj.acc_no)){
-        console.log(`Account matched for: ${JSON.stringify(accObj.bill_type)}`);
+        log.debug(`Account matched for: ${JSON.stringify(accObj.bill_type)}`);
         return accObj;
       }
     }
@@ -29,13 +31,13 @@ export default class Bills {
     const matches = this.text.match(accObj.regex);
     if(matches.length >= accObj.date_num) {
       const rawDate = matches[accObj.date_num];
-      console.log(`Raw date for account ${accObj.bill_type} is: ${rawDate}`);
+      log.debug(`Raw date for account ${accObj.bill_type} is: ${rawDate}`);
       const date = new moment(rawDate, accObj.date_format).toDate();
       const formatted_date = moment(date).format('YY-MM');
-      console.log(`Date for account ${accObj.bill_type} is: ${formatted_date}`);
+      log.debug(`Date for account ${accObj.bill_type} is: ${formatted_date}`);
       return formatted_date;
     } else {
-      console.log(`No Date for account ${accObj.bill_type} matched!`);
+      log.debug(`No Date for account ${accObj.bill_type} matched!`);
       throw new Error('No date matched in bill')
     }
   }

@@ -21,32 +21,6 @@ export default class PDFToText
     log.debug(`PDFToText init with: ${this.fileName} ${this.filePath} ${JSON.stringify(this.fileData)}`);
   }
 
-  async write_s3(filePath) {
-    return new Promise((resolve, reject) => {
-      const AWS = require('aws-sdk');
-
-      AWS.config.region = 'eu-west-1';
-      const s3 = new AWS.S3();
-      log.debug('Going to call S3');
-      
-      var params = {
-          Bucket: 'gbspdf',
-          Key: 'test.pdf',
-          Body: fs.readFileSync(filePath),
-          ContentType: 'application/octet-stream'
-      };
-
-      s3.upload(params, function (err, res) {               
-        if(err) {
-          log.debug("Error in uploading file on s3 due to "+ err)
-          reject(err);
-        } else {    
-          log.debug("File successfully uploaded.")
-          resolve();
-        }
-      });
-    });
-  }
   /**
   * Write a buffer to disk
   * @param {filePath} - path to the file

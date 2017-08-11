@@ -5,9 +5,10 @@ const assert = chai.assert;
 const isWin = require('os').platform().indexOf('win') > -1;
 const where = isWin ? 'where' : 'whereis';
 const exec = require('child_process').exec
-const instance = new PDFToText({filename: 'test.pdf', data: fs.readFileSync('test/test.pdf')});
 
-describe('PDFToText#run', () => {
+describe('PDFToText#run with valid PDF', () => {
+
+    const instance = new PDFToText({filename: 'test.pdf', data: fs.readFileSync('test/test.pdf')});
 
     it('should have pdftotext in path', async () => {
       const child = exec(where + ' pdftotext');
@@ -29,3 +30,16 @@ describe('PDFToText#run', () => {
     });
 
 });
+
+// describe('PDFToText#run with malformed PDF', () => {
+//   const instance = new PDFToText({filename: 'malformed.pdf', data: fs.readFileSync('test/malformed.pdf')});
+    
+//     it('should not correctly return text of PDF', async () => {
+//       try {
+//         const response = await instance.run();
+//       } catch (err) { 
+//         console.log('IN CATCH!');
+//         assert.include(err.message, 'Syntax Error', 'The wrong error is being given');
+//       }
+//     });
+// });

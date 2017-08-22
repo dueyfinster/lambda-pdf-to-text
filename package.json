@@ -19,11 +19,7 @@
     "type": "git",
     "url": "git+https://github.com/dueyfinster/lambda-pdf.git"
   },
-  "keywords": [
-    "pdf",
-    "aws",
-    "lambda"
-  ],
+  "keywords": ["pdf", "aws", "lambda"],
   "author": "Neil Grogan",
   "license": "UNLICENSED",
   "bugs": {
@@ -31,11 +27,8 @@
   },
   "homepage": "https://github.com/dueyfinster/lambda-pdf#readme",
   "dependencies": {
-    "aws-sdk": "^2.15.0",
     "babel-runtime": "^6.11.6",
     "busboy": "^0.2.14",
-    "dropbox": "^2.5.7",
-    "moment": "^2.18.1",
     "parse-multipart": "^1.0.4",
     "winston": "^2.3.1"
   },
@@ -58,10 +51,7 @@
     "mocha": "latest"
   },
   "babel": {
-    "presets": [
-      "stage-0",
-      "es2015"
-    ],
+    "presets": ["stage-0", "es2015"],
     "plugins": [
       "transform-runtime",
       "transform-async-to-generator",

@@ -11,7 +11,7 @@
     "build:install": "cp package.json dist/ && cd dist && npm install --production",
     "package": "npm run build && npm run package:pack",
     "package:pack": "zip -r artifact.zip dist/*",
-    "deploy": "npm run package && aws lambda update-function-code --function-name pdf --zip-file fileb://artifact.zip --region eu-west-1",
+    "deploy": "npm run package && aws lambda update-function-code --function-name pdf --zip-file fileb://artifact.zip --region us-east-1",
     "test": "mocha -r babel-register -r babel-polyfill --recursive test/"
   },
   "repository": {

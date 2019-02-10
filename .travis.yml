@@ -9,3 +9,10 @@ script:
 deploy:
   provider: script
   script: npm run deploy
+notifications:
+  email: false
+  irc:
+    channels:
+      - "chat.freenode.net#dueyfinster"
+    on_success: change # default: always
+    on_failure: always # default: always
